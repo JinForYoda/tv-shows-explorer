@@ -27,3 +27,9 @@ Run every check:
 ```bash
 bun nx run-many -t lint test typecheck build
 ```
+
+## Deploy
+
+The app is hosted on Vercel. To set it up, import the GitHub repository on [vercel.com](https://vercel.com/new) and keep the root directory as the repository root. Everything else (install and build commands, output directory, SPA routing) comes from [vercel.json](vercel.json), so there is nothing else to configure.
+
+The install command pins Bun to the version in `packageManager` in `package.json`. When you upgrade Bun, update both.
