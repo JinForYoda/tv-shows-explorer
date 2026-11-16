@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@tv-shows-explorer/ui-kit": "workspace:*"
+    "@tv-shows-explorer/ui-kit": "workspace:*",
+    "zod": "^4"
   },
   "nx": {
     "name": "web"
