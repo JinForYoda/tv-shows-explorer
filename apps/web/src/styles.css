@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+@import '@tv-shows-explorer/ui-kit/theme.css';
+
+@source '../../../libs/ui-kit/src';
