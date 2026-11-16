@@ -31,6 +31,25 @@ export default [
     },
   },
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      'max-lines': [
+        'error',
+        { max: 120, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['**/*.spec.*', '**/*.test.*'],
+    rules: {
+      'max-lines-per-function': [
+        'error',
+        { max: 80, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+  {
     files: [
       '**/*.ts',
       '**/*.tsx',
