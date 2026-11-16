@@ -1,35 +1,36 @@
 # Simple Architecture
 
-Архитектура фронтенда этого репозитория. Основана на «Чистой архитектуре» Роберта Мартина
-и расширяется от урока к уроку курса. Аббревиатура **VIPER**: каждая буква — слой.
+The frontend architecture of this repository, based on Robert C. Martin's _Clean Architecture_. It grows stage by
+stage. The acronym is **VIPER**: each letter is a layer.
 
-| Буква | Слой       | Статус          |
-| ----- | ---------- | --------------- |
-| V     | View       | Урок 1          |
-| I     | —          | ещё не разобран |
-| P     | Presenter  | Урок 1          |
-| E     | —          | ещё не разобран |
-| R     | —          | ещё не разобран |
+| Letter | Layer     | Status          |
+| ------ | --------- | --------------- |
+| V      | View      | Stage 1         |
+| I      | —         | not defined yet |
+| P      | Presenter | Stage 1         |
+| E      | —         | not defined yet |
+| R      | —         | not defined yet |
 
-Термины (Block, View, Presenter, ui-kit) определены в [GLOSSARY.md](../GLOSSARY.md).
+Terms (Block, Screen, View, Presenter, ui-kit) are defined in [GLOSSARY.md](../GLOSSARY.md).
 
 ---
 
-## Урок 1 — View + Presenter
+## Stage 1 — View + Presenter
 
-### Правило 1. View — конечная точка
+### Rule 1. The View is the end point
 
-`index.tsx` блока — это View: React-компонент, который только рисует.
+A block's `index.tsx` is its View: a React component that only renders.
 
-- Во View вызывается ровно один хук логики — `usePresenter(props)`.
-- Единственное исключение — `useTranslation` (i18n относится к отображению). В этом проекте i18n нет.
-- Любой другой хук (`useState`, `useEffect`, `useRef`, `useQuery`, …) считается логикой и живёт в presenter'е.
-- Значения из props, которые нужны только для отрисовки, View может читать напрямую (`props.title`),
-  не прогоняя их через presenter.
+- A View calls exactly one logic hook: `usePresenter(props)`.
+- The only exception is `useTranslation`, because i18n belongs to rendering. This project has no i18n.
+- Any other hook (`useState`, `useEffect`, `useRef`, `useQuery`, …) is logic and lives in the presenter.
+- Props that are only needed for rendering may be read by the View directly (`props.title`) without going through
+  the presenter.
+- Enforced by ESLint (`no-restricted-syntax` for `src/screens/**/index.tsx` in `apps/web/eslint.config.mjs`).
 
 ```tsx
 export function ShowCard(props: ShowCardProps) {
-  const { ratingLabel, summary } = usePresenter(props)
+  const { ratingLabel, summary } = usePresenter(props);
 
   return (
     <article>
@@ -37,19 +38,22 @@ export function ShowCard(props: ShowCardProps) {
       <span>{ratingLabel}</span>
       <p>{summary}</p>
     </article>
-  )
+  );
 }
 ```
 
-### Правило 2. Presenter — точка входа логики
+### Rule 2. The Presenter is the entry point for logic
 
-`usePresenter.ts` — хук, который отдаёт View всё, что нужно для отрисовки: готовые значения и обработчики.
-На уроке 1 в нём (или за ним) лежит вся бизнес-логика блока.
+`usePresenter.ts` is a hook that gives the View everything it needs to render: ready-made values and handlers.
+In stage 1 all of a block's business logic lives in it or behind it.
 
-### Правило 3. Структура папок — дерево блоков
+### Rule 3. The folder structure is a tree of blocks
 
-Если у блока на экране есть ребёнок, ребёнок получает свою папку со своими View и Presenter внутри папки родителя.
-Дерево папок повторяет дерево блоков на экране.
+When a block on screen has a child, the child gets its own folder, with its own View and Presenter, inside the
+parent's folder. The folder tree mirrors the block tree on screen.
+
+A block gets a `usePresenter.ts` only when it has at least one computation or handler. A block that only renders its
+props is a single `index.tsx`; an empty presenter returning `{}` is not created.
 
 ```
 Navbar/
@@ -60,30 +64,37 @@ Navbar/
     └── usePresenter.ts
 ```
 
-### Правило 4. `components/` и `lib/` — переиспользование внутри поддерева
+### Rule 4. `components/` and `lib/` — reuse within a subtree
 
-На любом уровне дерева можно завести:
+Any level of the tree may have:
 
-- `components/` — блоки (той же формы: View + Presenter), которые используются в **2+ местах** на этом уровне и ниже;
-- `lib/` — не-компоненты (функции, типы, хуки-помощники) с тем же правилом «2+ потребителя на этом уровне и ниже».
+- `components/` — blocks (same shape: View + Presenter) used in **2+ places** at this level or below;
+- `lib/` — non-components (functions, types, helper hooks) under the same "2+ consumers at this level or below" rule.
 
-Если что-то нужно только одному блоку — оно лежит в папке этого блока.
+Anything only one block needs lives in that block's folder.
 
-### Правило 5. Маленькие атомарные файлы
+### Rule 5. Small, atomic files
 
-Каждый файл — не больше **120 строк кода** (без пустых строк и комментариев). Проверяется ESLint (`max-lines`).
+Every file has at most **120 lines of code** (blank lines and comments excluded). Enforced by ESLint (`max-lines` in
+the root `eslint.config.mjs`).
 
-### Правило 6. Presenter не обязан содержать всю логику
+### Rule 6. The Presenter does not have to hold all the logic
 
-Presenter — точка входа, а не свалка. Логику, которая не является хуком блока, выносим в отдельные атомарные файлы
-**рядом с блоком** (`fetchShows.ts`, `collectGenres.ts`). Их импортирует только presenter; View их не импортирует.
+The presenter is an entry point, not a dumping ground. Logic that is not the block's hook goes into separate atomic
+files **next to the block** (`fetchShows.ts`, `collectGenres.ts`). Only the presenter imports them; the View does not.
 
-### Правило 7. Нет `shared/`
+### Rule 7. No `shared/`
 
-Папки `shared` нет. В `src/` может лежать `ui-kit/` — «глупые» переиспользуемые компоненты без бизнес-логики и без presenter'ов.
-Всё остальное переиспользуемое живёт в `components/` / `lib/` ближайшего общего предка (правило 4).
+There is no `shared` folder. The only exception is the **ui-kit**: dumb reusable components with no business logic and
+no presenters. In this repository the ui-kit is the Nx library `libs/ui-kit`. Everything else that is reused lives in
+the `components/` or `lib/` of the nearest common ancestor (rule 4).
 
-### Правило 8. Родитель → ребёнок только через props
+### Rule 8. Parent → child through props only
 
-На уроке 1 ребёнок получает данные и колбэки только через props от View родителя. Context и сторы не используем,
-пока курс не дойдёт до соответствующих слоёв.
+In stage 1 a child gets data and callbacks only through props from its parent's View. No context and no stores until
+the architecture defines the layers for them.
+
+### Rule 9. The root of the tree is a Screen
+
+The root block of a screen is called a **Screen** and lives in `src/screens/<Name>/`. The word "page" is reserved for
+a page of results in pagination, so there is no `pages/` folder.

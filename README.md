@@ -1,7 +1,29 @@
 # TV Shows Explorer
 
-Поиск сериалов через [TVmaze API](https://www.tvmaze.com/api). Учебный проект курса по Simple Architecture.
+A React app for finding TV shows through the [TVmaze API](https://www.tvmaze.com/api): search by title, narrow the results by genre, and page through them.
 
-- Архитектура: [docs/simple-architecture.md](docs/simple-architecture.md)
-- Глоссарий: [GLOSSARY.md](GLOSSARY.md)
-- Задание: [docs/homework/01-tv-shows-explorer.md](docs/homework/01-tv-shows-explorer.md)
+The project is a take on **Simple Architecture**, a frontend architecture based on Robert C. Martin's _Clean Architecture_. Its rules are written down in [docs/simple-architecture.md](docs/simple-architecture.md) and grow as the architecture evolves.
+
+## Stack
+
+Nx monorepo on bun · React 19 + Vite · Tailwind CSS v4 + shadcn/ui · TanStack Query · zod · Vitest
+
+## Docs
+
+- Architecture: [docs/simple-architecture.md](docs/simple-architecture.md)
+- Glossary: [GLOSSARY.md](GLOSSARY.md)
+- Requirements: [docs/requirements/01-tv-shows-explorer.md](docs/requirements/01-tv-shows-explorer.md)
+- Implementation plan: [docs/plans/01-tv-shows-explorer.md](docs/plans/01-tv-shows-explorer.md)
+
+## Getting started
+
+```bash
+bun install
+bun nx dev web
+```
+
+Run every check:
+
+```bash
+bun nx run-many -t lint test typecheck build
+```
