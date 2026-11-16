@@ -2,7 +2,9 @@
   "name": "@tv-shows-explorer/web",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@tv-shows-explorer/ui-kit": "workspace:*"
+  },
   "nx": {
     "name": "web"
   }

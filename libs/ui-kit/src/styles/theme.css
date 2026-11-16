@@ -1,0 +1,103 @@
+@import './fonts.css';
+
+:root {
+  color-scheme: light;
+  --radius: 0;
+
+  --background: #f1f1ec;
+  --foreground: #121212;
+  --card: #f7f7f3;
+  --card-foreground: #121212;
+  --popover: #f7f7f3;
+  --popover-foreground: #121212;
+  --primary: #d62f1f;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e2da;
+  --secondary-foreground: #121212;
+  --muted: #e2e2da;
+  --muted-foreground: #5a5a55;
+  --accent: #121212;
+  --accent-foreground: #f1f1ec;
+  /* #d62f1f is 4.3:1 on the paper; a deeper red keeps error text at AA. */
+  --destructive: #b8281a;
+  --border: #121212;
+  --input: #121212;
+  --ring: #d62f1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --background: #121211;
+    --foreground: #ecebe4;
+    --card: #1a1a18;
+    --card-foreground: #ecebe4;
+    --popover: #1a1a18;
+    --popover-foreground: #ecebe4;
+    /* White on a red light enough to read on black drops below 3:1, so the ink flips to dark. */
+    --primary: #f45b45;
+    --primary-foreground: #121211;
+    --secondary: #262623;
+    --secondary-foreground: #ecebe4;
+    --muted: #262623;
+    --muted-foreground: #a3a29a;
+    --accent: #ecebe4;
+    --accent-foreground: #121211;
+    --destructive: #ff7a66;
+    --border: #8f8e86;
+    --input: #8f8e86;
+    --ring: #f45b45;
+  }
+}
+
+@theme {
+  --font-display:
+    'Instrument Serif', ui-serif, Georgia, Cambria, 'Times New Roman', Times,
+    serif;
+  --font-mono:
+    'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  --font-sans: var(--font-mono);
+}
+
+@theme inline {
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-normal;
+  }
+}
